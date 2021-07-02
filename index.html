@@ -4,19 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello World!!</title>
-    <style>
-        table { border-collapse: collapse; }
-        table, th, td { border: 1px solid black; }
-    </style>
+    <!link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <h1>Hello World!</h1>
+    <table width="700" border="1" align="center">
+        <tr>
+        <td colspan="2">
+        <h1  align="center">DTU配置软件</h1>
+        </td>
+        </tr>
+        
+        <tr>
+        <td style="width:200px;vertical-align:top;">
+            <button id="serialConnectBtn">设备连接</button><br>
 
-    We are using Node.js <span id="node-version"></span>, Chromium <span id="chrome-version"></span>, Electron <span id="electron-version"></span>, and Serialport <span id="serialport-version"></span>
+        </td>
 
-    <div id="error"></div>
-    <div id="ports"></div>
+        <td style="background-color:#eeeeee;height:200px;width:400px;vertical-align:top;">
+            <h1>设备状态</h1>
+            <div id="serialConnectInfo"></div>
+        </td>
+        </tr>
+        
+        <tr>
+        <td colspan="2" style="background-color:#FFA500;text-align:center;">
+        版权 © albert.com</td>
+        </tr>
+    </table>
 </body>
 
 <script src="./renderer.js"></script>
