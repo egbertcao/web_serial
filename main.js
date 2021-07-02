@@ -14,17 +14,18 @@ let mainWindow
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1000,
+        height: 800,
         webPreferences: {
             nodeIntegration: true,
-            //preload: path.join(__dirname, 'preload.js')
+            contextIsolation: false,
+            enableRemoteModule: true
         }
     })
 
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
+        pathname: path.join(__dirname, 'html/index.html'),
         protocol: 'file:',
         slashes: true
     }))
