@@ -13,16 +13,72 @@
     </div>
         
     <div id="nav">
-        <button  class="button button1" id="ConnectPageBtn">设备连接</button><br>
-        <button  class="button button1" id="ConnectPageBtn">Modbus配置</button><br>
-        <button  class="button button1" id="ConnectPageBtn">MQTT配置</button><br>
-        <button  class="button button1" id="ConnectPageBtn">HTTP配置</button><br>
-        <button  class="button button1" id="ConnectPageBtn">UDP配置</button><br>
+            <input type="radio" id="item1" name="item">
+            <label id="head_label" for="item1">设备连接</label>
+            <div class="context hiddenDiv">
+                <span>
+                    <select id="serial_port" name="serial_port">
+                        <option value="" style="display: none;" disabled selected>Port</option>
+                    </select>
+                    <select id="serial_baud" name="serial_baud">
+                        <option value="" style="display: none;" disabled selected>Baud Rate</option>
+                        <option value="115200">115200</option>
+                    </select>
+                    <select id="serial_data" name="serial_data">
+                        <option value="" style="display: none;" disabled selected>Data Bits</option>
+                        <option value="8">8</option>
+                    </select>
+                    <select id="serial_stop" name="serial_stop">
+                        <option value="" style="display: none;" disabled selected>Stop Bits</option>
+                        <option value="1">1</option>
+                    </select>
+                    <select id="serial_Parity" name="serial_Parity">
+                        <option value="" style="display: none;" disabled selected>Parity</option>
+                        <option value="None">None</option>
+                    </select>
+                    <select id="serial_flow" name="serial_flow">
+                        <option value="" style="display: none;" disabled selected>Flow Control</option>
+                        <option value="None">None</option>
+                    </select>
+                    <button  class="button button1" id="serialConnectBtn">连接</button><br>             
+                </span>
+            </div>
+
+            <input type="radio" id="item2" name="item">
+            <label id="head_label" for="item2">Modbus配置</label>
+            <div class="context hiddenDiv">
+                <span>
+                span123span css html jav
+                </span>
+            </div>
+
+            <input type="radio" id="item3" name="item">
+            <label id="head_label" for="item3">MQTT配置</label>
+            <div class="context hiddenDiv">
+                <span>
+                span123span css html jav
+                </span>
+            </div>
+            <input type="radio" id="item4" name="item">
+            <label id="head_label" for="item4">TCP配置</label>
+            <div class="context hiddenDiv">
+                <span>
+                span123span css html jav
+                </span>
+            </div>
+            <input type="radio" id="item5" name="item">
+            <label id="head_label" for="item5">UDP配置</label>
+            <div class="context hiddenDiv">
+                <span>
+                span123span css html jav
+                </span>
+            </div>
     </div>
 
     <div id="section">
         <h1 id="content-h1">设备详情</h1>
         <tb id="serialConnectInfo"></tb>
+        <tb id="ConnectResult"></tb>
     </div>
     
     <div id="footer">
@@ -31,5 +87,6 @@
 </body>
 
 <script src="../renderer/renderer.js"></script>
+<script src="../renderer/serial.js"></script>
 
 </html>

@@ -14,14 +14,16 @@ let mainWindow
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 1000,
-        height: 800,
+        show: false,
+        width: 800,
+        height: 1000,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
             enableRemoteModule: true
         }
     })
+    mainWindow.maximize()
 
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
@@ -40,6 +42,7 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null
     })
+    mainWindow.show()
 }
 
 // This is required to be set to false beginning in Electron v9 otherwise
