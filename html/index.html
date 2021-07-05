@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Hello World!!</title>
+    <title>Device Manager</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -13,121 +13,96 @@
     </div>
         
     <div id="nav">
-            <input type="radio" id="item1" name="item">
-            <label id="head_label" for="item1">设备连接</label>
-            <div class="context hiddenDiv">
-                <span>
-                    <select id="serial_port" name="serial_port">
-                        <option value="" style="display: none;" disabled selected>Port</option>
-                    </select>
-                    <select id="serial_baud" name="serial_baud">
-                        <option value="" style="display: none;" disabled selected>Baud Rate</option>
-                        <option value="115200">115200</option>
-                    </select>
-                    <select id="serial_data" name="serial_data">
-                        <option value="" style="display: none;" disabled selected>Data Bits</option>
-                        <option value="8">8</option>
-                    </select>
-                    <select id="serial_stop" name="serial_stop">
-                        <option value="" style="display: none;" disabled selected>Stop Bits</option>
-                        <option value="1">1</option>
-                    </select>
-                    <select id="serial_Parity" name="serial_Parity">
-                        <option value="" style="display: none;" disabled selected>Parity</option>
-                        <option value="None">None</option>
-                    </select>
-                    <select id="serial_flow" name="serial_flow">
-                        <option value="" style="display: none;" disabled selected>Flow Control</option>
-                        <option value="None">None</option>
-                    </select>
-                    <button  class="button button1" id="serialConnectBtn" >连接</button><br>             
-                </span>
-            </div>
+        <div class="context" id="serialSetting">
+            <span>
+                <select id="serial_port" name="serial_port">
+                    <option value="" style="display: none;" disabled selected>Port</option>
+                </select>
+                <select id="serial_baud" name="serial_baud">
+                    <option value="" style="display: none;" disabled selected>Baud Rate</option>
+                    <option value="115200">115200</option>
+                </select>
+                <select id="serial_data" name="serial_data">
+                    <option value="" style="display: none;" disabled selected>Data Bits</option>
+                    <option value="8">8</option>
+                </select>
+                <select id="serial_stop" name="serial_stop">
+                    <option value="" style="display: none;" disabled selected>Stop Bits</option>
+                    <option value="1">1</option>
+                </select>
+                <select id="serial_Parity" name="serial_Parity">
+                    <option value="" style="display: none;" disabled selected>Parity</option>
+                    <option value="None">None</option>
+                </select>
+                <select id="serial_flow" name="serial_flow">
+                    <option value="" style="display: none;" disabled selected>Flow Control</option>
+                    <option value="None">None</option>
+                </select>
+                <button  class="button button1" id="serialConnectBtn" >连接</button><br>             
+            </span>
+        </div>
 
-            <input type="radio" id="item2" name="item">
-            <label id="head_label" for="item2">工作模式配置</label>
-            <div class="context hiddenDiv">
-                <span>
-                    <select id="device_mode" name="device_mode">
-                        <option value="" style="display: none;" disabled selected>选择设备工作模式</option>
-                        <option value="SetDeviceMode:modbusMode">Modbus模式</option>
-                        <option value="SetDeviceMode:configMode">配置模式</option>
-                    </select>
-                    <button  class="button button1" id="SetdeviceModeBtn">设置模式</button>
-                    <button  class="button button1" id="GetdeviceModeBtn">获取模式</button>
-                </span>
-            </div>
+        
+        <div class="context" id="ModeSetting">
+            <span>
+                <select id="device_mode" name="device_mode">
+                    <option value="" style="display: none;" disabled selected>选择设备工作模式</option>
+                    <option value="SetDeviceMode:modbusMode">Modbus模式</option>
+                    <option value="SetDeviceMode:configMode">配置模式</option>
+                </select>
+                <button  class="button button1" id="SetdeviceModeBtn">设置模式</button>
+                <button  class="button button1" id="GetdeviceModeBtn">获取模式</button>
+            </span>
+            <p id='device_mode_result'></p>
+        </div>
 
-            <input type="radio" id="item3" name="item">
-            <label id="head_label" for="item3">Modbus配置</label>
-            <div class="context hiddenDiv">
-                <span>
-                    <input type="text" name="slave_address" class="content_input" id="slave_address" placeholder="从机地址">
-                    <select id="register_address" name="register_address">
-                        <option value="" style="display: none;" disabled selected>寄存器地址</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                    </select>
-                    <input type="text" name="slave_function" class="content_input" id="slave_function" placeholder="功能定义">
-                    <select id="slave_protocol" name="slave_protocol">
-                        <option value="" style="display: none;" disabled selected>传输协议</option>
-                        <option value="2">MQTT</option>
-                        <option value="3">TCP</option>
-                        <option value="4">UDP</option>
-                        <option value="5">HTTP</option>
-                        <option value="6">阿里云</option>
-                    </select>
-                    <button  class="button button2_1" id="addSlaveBtn">ADD</button>
-                    <button  class="button button2_2" id="commitSlaveBtn">COMMIT</button>
-                    <table>
-                        <thead>
-                        <tr>
-                            <td>ID</td>
-                            <td>SlaveID</td>
-                            <td>RegID</td>
-                            <td>function</td>
-                            <td>protocol</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <!--    动态添加内容  -->
-                        </tbody>
-                    </table>
-                    <div id="slavetable"></div>
-                </span>
-            </div>
-
-            <input type="radio" id="item4" name="item">
-            <label id="head_label" for="item4">MQTT配置</label>
-            <div class="context hiddenDiv">
-                <span>
-                span123span css html jav
-                </span>
-            </div>
-            <input type="radio" id="item5" name="item">
-            <label id="head_label" for="item5">TCP配置</label>
-            <div class="context hiddenDiv">
-                <span>
-                span123span css html jav
-                </span>
-            </div>
-            <input type="radio" id="item6" name="item">
-            <label id="head_label" for="item6">UDP配置</label>
-            <div class="context hiddenDiv">
-                <span>
-                span123span css html jav
-                </span>
-            </div>
+        <div class="context" id="ModbusSetting">
+            <span>
+                <input type="text" name="slave_address" class="content_input" id="slave_address" placeholder="从机地址">
+                <select id="register_address" name="register_address">
+                    <option value="" style="display: none;" disabled selected>寄存器地址</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
+                <input type="text" name="slave_function" class="content_input" id="slave_function" placeholder="功能定义">
+                <select id="slave_protocol" name="slave_protocol">
+                    <option value="" style="display: none;" disabled selected>传输协议</option>
+                    <option value="MQTT">MQTT</option>
+                    <option value="TCP">TCP</option>
+                    <option value="UDP">UDP</option>
+                    <option value="HTTP">HTTP</option>
+                    <option value="ALI">阿里云</option>
+                </select>
+                <button  class="button button2_1" id="addSlaveBtn">ADD</button>
+                <button  class="button button2_2" id="deleteSlaveBtn">DELETE</button>
+                <button  class="button button2_3" id="commitSlaveBtn">COMMIT</button>
+                <table>
+                    <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>SlaveID</td>
+                        <td>RegID</td>
+                        <td>function</td>
+                        <td>protocol</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <!--    动态添加内容  -->
+                    </tbody>
+                </table>
+                <div id="slavetable"></div>
+            </span>
+        </div>
     </div>
-
+            
     <div id="section">
         <h1 id="content-h1">设备详情</h1>
         <tb id="serialConnectInfo"></tb>

@@ -37,16 +37,24 @@
     background-color: #4CAF50;
     color: white;
     border: 1px solid #4CAF50;
-    width: 49%;
+    width: 30%;
     float: left;
 }
 .button2_2 {
     background-color: #4CAF50;
     color: white;
     border: 1px solid #4CAF50;
-    width: 49%;
-    float: right;
+    width: 30%;
+    float: left;
 }
+.button2_3 {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+    width: 30%;
+    float: left;
+}
+
 
 .button1:hover {
     background-color: white; 
@@ -57,6 +65,10 @@
     color: black; 
 }
 .button2_2:hover {
+    background-color: white; 
+    color: black; 
+}
+.button2_3:hover {
     background-color: white; 
     color: black; 
 }
@@ -97,7 +109,7 @@ html,body{
 #head_label{
     display:block;
     background-color: #F5F5F5;
-    width:99%;
+    width:20%;
     height:20px;
     margin:0 auto;
     border:1px solid #dddddd;
@@ -117,14 +129,7 @@ html,body{
     -moz-transition:height 0.5s linear;
     -ms-transition:height 0.5s linear;
 }
-input[type="radio"]{
-    width: 100%;
-    display:none;
-}
-input:checked + label + .context{
-    visibility: visible;
-    height:360px;
-}
+
 
 select {
     width: 100%;
@@ -168,3 +173,4 @@ table td {
     tab-size: 10px;
     border:1px solid #000 ;
 }
+

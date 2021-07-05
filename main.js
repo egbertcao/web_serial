@@ -1,3 +1,4 @@
+const { Menu } = require('electron')
 const electron = require('electron')
     // Module to control application life.
 const app = electron.app
@@ -55,7 +56,32 @@ app.allowRendererProcessReuse=false
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', function(){
+    createWindow()
+    const template = [
+        {
+            label: '设备连接',
+            click: function(){
+                mainWindow.webContents.send("send-message-to-renderer","设备连接");
+            }
+        },
+        {
+            label: '设备模式配置',
+            click: function(){
+                mainWindow.webContents.send("send-message-to-renderer","设备模式配置");
+            }
+        },
+        {
+            label: 'Modbus配置',
+            click: function(){
+                mainWindow.webContents.send("send-message-to-renderer","Modbus配置");
+            }
+        },
+    ]
+    const menu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(menu)
+})
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
