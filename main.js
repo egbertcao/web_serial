@@ -33,9 +33,6 @@ function createWindow() {
         slashes: true
     }))
 
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools()
-
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
         // Dereference the window object, usually you would store windows
@@ -76,6 +73,60 @@ app.on('ready', function(){
             click: function(){
                 mainWindow.webContents.send("send-message-to-renderer","Modbus配置");
             }
+        },
+        {
+            label: '通讯配置',
+            submenu: [
+                {
+                    label: '串口配置',
+                    click: function(){
+                        mainWindow.webContents.send("send-message-to-renderer","串口配置");
+                    }
+                },
+                {
+                    label: 'MQTT配置',
+                    click: function(){
+                        mainWindow.webContents.send("send-message-to-renderer","MQTT配置");
+                    }
+                },
+                {
+                    label: 'TCP/UDP配置',
+                    click: function(){
+                        mainWindow.webContents.send("send-message-to-renderer","TCP配置");
+                    }
+                },
+                {
+                    label: 'HTTP配置',
+                    click: function(){
+                        mainWindow.webContents.send("send-message-to-renderer","HTTP配置");
+                    }
+                },
+                {
+                    label: 'Ali配置',
+                    click: function(){
+                        mainWindow.webContents.send("send-message-to-renderer","Ali配置");
+                    }
+                }
+            ]
+        },
+        {
+            label: 'HELP',
+            submenu: [
+                {
+                    label: 'ABOUT',
+                    click: function(){
+                        const child = new BrowserWindow({ parent: mainWindow })
+                        child.show()
+                    }
+                },
+                {
+                    label: 'OPENDEV',
+                    click: function(){                    
+                        // Open the DevTools.
+                        mainWindow.webContents.openDevTools()
+                    }
+                },
+            ]
         },
     ]
     const menu = Menu.buildFromTemplate(template)

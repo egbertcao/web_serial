@@ -1,117 +1,208 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>Device Manager</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-
+    <head>
+        <meta charset="UTF-8">
+        <title>Device Manager</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
 <body>
-    <div id="header">
-        <h1 id="head-h1">Device Manager</h1>
-    </div>
-        
-    <div id="nav">
-        <div class="context" id="serialSetting">
-            <span>
-                <select id="serial_port" name="serial_port">
-                    <option value="" style="display: none;" disabled selected>Port</option>
-                </select>
-                <select id="serial_baud" name="serial_baud">
-                    <option value="" style="display: none;" disabled selected>Baud Rate</option>
-                    <option value="115200">115200</option>
-                </select>
-                <select id="serial_data" name="serial_data">
-                    <option value="" style="display: none;" disabled selected>Data Bits</option>
-                    <option value="8">8</option>
-                </select>
-                <select id="serial_stop" name="serial_stop">
-                    <option value="" style="display: none;" disabled selected>Stop Bits</option>
-                    <option value="1">1</option>
-                </select>
-                <select id="serial_Parity" name="serial_Parity">
-                    <option value="" style="display: none;" disabled selected>Parity</option>
-                    <option value="None">None</option>
-                </select>
-                <select id="serial_flow" name="serial_flow">
-                    <option value="" style="display: none;" disabled selected>Flow Control</option>
-                    <option value="None">None</option>
-                </select>
-                <button  class="button button1" id="serialConnectBtn" >连接</button><br>             
-            </span>
-        </div>
 
-        
-        <div class="context" id="ModeSetting">
-            <span>
-                <select id="device_mode" name="device_mode">
-                    <option value="" style="display: none;" disabled selected>选择设备工作模式</option>
-                    <option value="SetDeviceMode:modbusMode">Modbus模式</option>
-                    <option value="SetDeviceMode:configMode">配置模式</option>
-                </select>
-                <button  class="button button1" id="SetdeviceModeBtn">设置模式</button>
-                <button  class="button button1" id="GetdeviceModeBtn">获取模式</button>
-            </span>
-            <p id='device_mode_result'></p>
-        </div>
+<div class="header">
+  <h1>Device Manager</h1>
+</div>
 
-        <div class="context" id="ModbusSetting">
-            <span>
-                <input type="text" name="slave_address" class="content_input" id="slave_address" placeholder="从机地址">
-                <select id="register_address" name="register_address">
-                    <option value="" style="display: none;" disabled selected>寄存器地址</option>
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                </select>
-                <input type="text" name="slave_function" class="content_input" id="slave_function" placeholder="功能定义">
-                <select id="slave_protocol" name="slave_protocol">
-                    <option value="" style="display: none;" disabled selected>传输协议</option>
-                    <option value="MQTT">MQTT</option>
-                    <option value="TCP">TCP</option>
-                    <option value="UDP">UDP</option>
-                    <option value="HTTP">HTTP</option>
-                    <option value="ALI">阿里云</option>
-                </select>
-                <button  class="button button2_1" id="addSlaveBtn">ADD</button>
-                <button  class="button button2_2" id="deleteSlaveBtn">DELETE</button>
-                <button  class="button button2_3" id="commitSlaveBtn">COMMIT</button>
-                <table>
-                    <thead>
-                    <tr>
-                        <td>ID</td>
-                        <td>SlaveID</td>
-                        <td>RegID</td>
-                        <td>function</td>
-                        <td>protocol</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <!--    动态添加内容  -->
-                    </tbody>
-                </table>
-                <div id="slavetable"></div>
+<div class="clearfix">
+  <div class="column menu">
+    <div class="menu_content" id="serialConnect">
+        <span>
+            <select id="serial_port" name="serial_port">
+                <option value="" style="display: none;" disabled selected>Port</option>
+            </select>
+            <select id="serial_baud" name="serial_baud">
+                <option value="" style="display: none;" disabled selected>Baud Rate</option>
+                <option value="115200">115200</option>
+            </select>
+            <select id="serial_data" name="serial_data">
+                <option value="" style="display: none;" disabled selected>Data Bits</option>
+                <option value="8">8</option>
+            </select>
+            <select id="serial_stop" name="serial_stop">
+                <option value="" style="display: none;" disabled selected>Stop Bits</option>
+                <option value="1">1</option>
+            </select>
+            <select id="serial_Parity" name="serial_Parity">
+                <option value="" style="display: none;" disabled selected>Parity</option>
+                <option value="None">None</option>
+            </select>
+            <select id="serial_flow" name="serial_flow">
+                <option value="" style="display: none;" disabled selected>Flow Control</option>
+                <option value="None">None</option>
+            </select>
+            <button  class="button button1" id="serialConnectBtn" >连接</button><br>
+            <button  class="button button1" id="GetDeviceDetailBtn" >获取设备信息</button><br>
             </span>
-        </div>
     </div>
-            
-    <div id="section">
-        <h1 id="content-h1">设备详情</h1>
-        <tb id="serialConnectInfo"></tb>
-        <tb id="ConnectResult"></tb>
+
+    <div class="menu_content" id="ModeSetting">
+        <span>
+            <select id="device_mode" name="device_mode">
+                <option value="" style="display: none;" disabled selected>选择设备工作模式</option>
+                <option value="1">配置模式</option>
+                <option value="2">Modbus模式</option>
+                <option value="3">透传模式</option>
+            </select>
+            <button  class="button button1" id="SetdeviceModeBtn">设置模式</button>
+            <button  class="button button1" id="GetdeviceModeBtn">获取模式</button>
+            <div class="menu_content", id="protocolType">
+                <select id="passProtocol" name="passProtocol">
+                    <option value="" style="display: none;" disabled selected>透传协议</option>
+                    <option value="2">MQTT</option>
+                    <option value="3">TCP</option>
+                    <option value="4">UDP</option>
+                    <option value="5">HTTP</option>
+                    <option value="6">阿里云</option>
+                </select>
+                <button  class="button button1" id="SetPassthroughBtn">设置透传协议</button>
+                <button  class="button button1" id="GetPassthroughBtn">获取透传协议</button>
+            </div>
+        </span>
     </div>
-    
-    <div id="footer">
-        Copyright albert123@163.com
+
+    <div class="menu_content" id="ModbusSetting">
+        <span>
+            <input type="number" name="slave_address" class="content_input" id="slave_address" placeholder="从机地址">
+            <select id="modbus_function" name="modbus_function">
+                <option value="" style="display: none;" disabled selected>功能码</option>
+                <option value="1">1读线圈数量</option>
+                <option value="2">2读离散量输入</option>
+                <option value="3">3读保持寄存器</option>
+                <option value="4">4读请求输入寄存器</option>
+            </select>
+            <input type="number" name="register_address" class="content_input" id="register_address" placeholder="寄存器首地址">
+            <input type="number" name="register_count" class="content_input" id="register_count" placeholder="寄存器个数">
+            <input type="text" name="slave_function" class="content_input" id="slave_function" placeholder="功能定义">
+            <input type="text" name="data_deal" class="content_input" id="data_deal" placeholder="数据处理方式">
+            <select id="slave_protocol" name="slave_protocol">
+                <option value="" style="display: none;" disabled selected>传输协议</option>
+                <option value="MQTT">MQTT</option>
+                <option value="TCP">TCP</option>
+                <option value="UDP">UDP</option>
+                <option value="HTTP">HTTP</option>
+                <option value="ALI">阿里云</option>
+            </select>
+            <button  class="button button2_1" id="addSlaveBtn">ADD</button>
+            <button  class="button button2_2" id="deleteSlaveBtn">DELETE</button>
+            <button  class="button button2_3" id="commitSlaveBtn">COMMIT</button>
+            <button  class="button button2_4" id="getSlaveBtn">GET</button>
+            <table>
+                <thead>
+                <tr>
+                    <td>选择</td>
+                    <td>从机地址</td>
+                    <td>功能码</td>
+                    <td>寄存器首地址</td>
+                    <td>寄存器个数</td>
+                    <td>功能定义</td>
+                    <td>数据处理</td>
+                    <td>传输协议</td>
+                </tr>
+                </thead>
+                <tbody>
+                    <!--    动态添加内容  -->
+                </tbody>
+            </table>
+            <div id="slavetable"></div>
+        </span>
     </div>
+    <div class="menu_content" id="serialSetting">
+        <span>
+            <input type="number" name="serialSeting_baud" id="serialSeting_baud" class="content_input" placeholder="Baud Rate">
+            <select id="serialSeting_data" name="serialSeting_data">
+                <option value="" style="display: none;" disabled selected>Data Bits</option>
+                <option value="0">5</option>
+                <option value="1">6</option>
+                <option value="2">7</option>
+                <option value="3">8</option>
+            </select>
+            <select id="serialSeting_stop" name="serialSeting_stop">
+                <option value="" style="display: none;" disabled selected>Stop Bits</option>
+                <option value="0">1</option>
+                <option value="1">2</option>
+            </select>
+            <select id="serialSeting_Parity" name="serialSeting_Parity">
+                <option value="" style="display: none;" disabled selected>Parity</option>
+                <option value="0">None</option>
+                <option value="1">Even</option>
+                <option value="2">Odd</option>
+            </select>
+            <button  class="button button1" id="SetSerialBtn" >设置串口</button><br>
+            <button  class="button button1" id="GetSerialBtn" >获取串口</button><br>
+        </span>
+    </div>
+    <div class="menu_content" id="MqttSetting">
+        <span>
+            <input type="text" name="mqtt_address" id="mqtt_address" class="content_input" placeholder="MQTT地址">
+            <input type="number" name="mqtt_port" id="mqtt_port" class="content_input" placeholder="MQTT端口号">
+            <input type="text" name="mqtt_clientid" id="mqtt_clientid" class="content_input" placeholder="MQTT ClientID">
+            <input type="text" name="mqtt_username" id="mqtt_username" class="content_input" placeholder="MQTT用户名">
+            <input type="text" name="mqtt_password" id="mqtt_password" class="content_input" placeholder="MQTT密码">
+            <select id="mqtt_version" name="mqtt_version">
+                <option value="" style="display: none;" disabled selected>MQTT版本</option>
+                <option value="3">3.1</option>
+                <option value="4">3.1.1</option>
+            </select>
+            <button  class="button button1" id="SetMqttBtn">设置MQTT</button>
+            <button  class="button button1" id="GetMqttBtn">获取MQTT</button>
+        </span>
+    </div>
+    <div class="menu_content" id="TCPSetting">
+        <span>
+            <select id="TCP_UDP" name="TCP_UDP">
+                <option value="" style="display: none;" disabled selected>TCP/UDP</option>
+                <option value="1">TCP</option>
+                <option value="2">UDP</option>
+            </select>
+            <input type="text" name="ip_address" id="ip_address" class="content_input" placeholder="地址">
+            <input type="number" name="ip_port" id="ip_port" class="content_input" placeholder="端口号">
+            <button  class="button button1" id="SetTcpBtn">设置</button>
+            <button  class="button button1" id="GetTcpBtn">获取TCP</button>
+            <button  class="button button1" id="GetUdpBtn">获取UDP</button>
+        </span>
+    </div>
+    <div class="menu_content" id="AliSetting">
+        <span>
+            <input type="text" name="product_key" id="product_key" class="content_input" placeholder="product_key">
+            <input type="text" name="product_secret" id="product_secret" class="content_input" placeholder="product_secret">
+            <input type="text" name="device_name" id="device_name" class="content_input" placeholder="device_name">
+            <input type="text" name="device_secret" id="device_secret" class="content_input" placeholder="device_secret">
+            <select id="puback_mode" name="puback_mode">
+                <option value="" style="display: none;" disabled selected>ACK模式</option>
+                <option value="1">automatic</option>
+                <option value="2">manual</option>
+            </select>
+            <button  class="button button1" id="SetAliBtn">设置</button>
+            <button  class="button button1" id="GetAliBtn">获取</button>
+        </span>
+    </div>
+
+  </div>
+
+  <div class="column content">
+      <div class="text_content1">
+        <h3>Device Status</h3>
+            <div id='device_detail'></div>
+      </div>
+      <div class="text_content2">
+        <h3>Serial Output</h3>
+            <p id='serial_output'></p>
+      </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>egbert123@163.com</p>
+</div>
+
 </body>
 
 <script src="../renderer/renderer.js"></script>
