@@ -79,16 +79,34 @@
                 <option value="4">4读请求输入寄存器</option>
             </select>
             <input type="number" name="register_address" class="content_input" id="register_address" placeholder="寄存器首地址">
-            <input type="number" name="register_count" class="content_input" id="register_count" placeholder="寄存器个数">
+            <select id="register_count" name="register_count">
+                <option value="" style="display: none;" disabled selected>寄存器个数</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
             <input type="text" name="slave_function" class="content_input" id="slave_function" placeholder="功能定义">
-            <input type="text" name="data_deal" class="content_input" id="data_deal" placeholder="数据处理方式">
+            <select id="endian" name="endian">
+                <option value="" style="display: none;" disabled selected>大小端</option>
+                <option value="1">BIG</option>
+                <option value="2">LITTLE</option>
+            </select>
+            <select id="data_multiply" name="data_multiply">
+                <option value="" style="display: none;" disabled selected>倍率</option>
+                <option value="1">x0.001</option>
+                <option value="2">x0.01</option>
+                <option value="3">x0.1</option>
+                <option value="4">x1</option>
+                <option value="5">x10</option>
+                <option value="6">x100</option>
+                <option value="7">x1000</option>
+            </select>
             <select id="slave_protocol" name="slave_protocol">
                 <option value="" style="display: none;" disabled selected>传输协议</option>
-                <option value="MQTT">MQTT</option>
-                <option value="TCP">TCP</option>
-                <option value="UDP">UDP</option>
-                <option value="HTTP">HTTP</option>
-                <option value="ALI">阿里云</option>
+                <option value="2">MQTT</option>
+                <option value="3">TCP</option>
+                <option value="4">UDP</option>
+                <option value="5">HTTP</option>
+                <option value="6">阿里云</option>
             </select>
             <button  class="button button2_1" id="addSlaveBtn">ADD</button>
             <button  class="button button2_2" id="deleteSlaveBtn">DELETE</button>
@@ -103,7 +121,8 @@
                     <td>寄存器首地址</td>
                     <td>寄存器个数</td>
                     <td>功能定义</td>
-                    <td>数据处理</td>
+                    <td>大小端</td>
+                    <td>倍率</td>
                     <td>传输协议</td>
                 </tr>
                 </thead>
@@ -146,6 +165,8 @@
             <input type="text" name="mqtt_clientid" id="mqtt_clientid" class="content_input" placeholder="MQTT ClientID">
             <input type="text" name="mqtt_username" id="mqtt_username" class="content_input" placeholder="MQTT用户名">
             <input type="text" name="mqtt_password" id="mqtt_password" class="content_input" placeholder="MQTT密码">
+            <input type="text" name="publish_theme" id="publish_theme" class="content_input" placeholder="发布主题">
+            <input type="text" name="subscribe_theme" id="subscribe_theme" class="content_input" placeholder="订阅主题">
             <select id="mqtt_version" name="mqtt_version">
                 <option value="" style="display: none;" disabled selected>MQTT版本</option>
                 <option value="3">3.1</option>
@@ -171,10 +192,10 @@
     </div>
     <div class="menu_content" id="AliSetting">
         <span>
-            <input type="text" name="product_key" id="product_key" class="content_input" placeholder="product_key">
-            <input type="text" name="product_secret" id="product_secret" class="content_input" placeholder="product_secret">
-            <input type="text" name="device_name" id="device_name" class="content_input" placeholder="device_name">
-            <input type="text" name="device_secret" id="device_secret" class="content_input" placeholder="device_secret">
+            <input type="text" name="product_key" id="product_key" class="content_input" placeholder="product key">
+            <input type="text" name="product_secret" id="product_secret" class="content_input" placeholder="product secret">
+            <input type="text" name="device_name" id="device_name" class="content_input" placeholder="device name">
+            <input type="text" name="device_secret" id="device_secret" class="content_input" placeholder="device secret">
             <select id="puback_mode" name="puback_mode">
                 <option value="" style="display: none;" disabled selected>ACK模式</option>
                 <option value="1">automatic</option>

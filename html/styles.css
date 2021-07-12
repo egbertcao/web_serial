@@ -106,7 +106,7 @@
   }
   
 .menu {
-    height: 500px;
+    height: 600px;
     width: 40%;
 }
   
@@ -135,7 +135,7 @@ html,body{
 
 .text_content1{
     width:99%;
-    height:260px;
+    height:300px;
     background-color: lightgoldenrodyellow;
     margin:0 auto;
     border:1px solid #dddddd;
@@ -148,7 +148,7 @@ html,body{
 
 .text_content2{
     width:99%;
-    height: 200px;
+    height: 260px;
     background-color:mintcream;
     margin:0 auto;
     border:1px solid #dddddd;

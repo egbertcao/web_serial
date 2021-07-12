@@ -25,7 +25,6 @@ SerialPort.list().then((ports, err) => {
 
 function ParseIncomeData(data)
 {
-  console.log(data)
   const ReceivedData = JSON.parse(data)
   console.log(ReceivedData)
   serial_output.innerHTML = JSON.stringify(ReceivedData);
@@ -46,40 +45,20 @@ function ParseIncomeData(data)
       tableHTML = tableify(msg);
       document.getElementById('device_detail').innerHTML = tableHTML
       break;
-
     case 14:  // 获取modbus
       console.log(msg)
       for (let index = 0; index < msg.length; index++) {
         const element = msg[index];
-        var protocol_code
-        switch (element.slave_protocol) {
-          case 2:
-            protocol_code = "MQTT";
-            break;
-          case 3:
-            protocol_code = "TCP";
-            break;
-          case 4:
-            protocol_code = "UDP";
-            break;
-          case 5:
-            protocol_code = "HTTP";
-            break;
-          case 6:
-            protocol_code = "ALI";
-          default:
-            protocol_code = 0;
-            break;
-        }
         add_colomn(
           element.slave_address,
           element.modbus_function,
           element.register_address,
           element.register_count,
           element.slave_function,
-          element.data_deal,
-          protocol_code
-        )  
+          element.endian,
+          element.data_multiply,
+          element.slave_protocol
+        )
       }
       break;
 
@@ -89,6 +68,8 @@ function ParseIncomeData(data)
       document.getElementById('mqtt_clientid').value = msg.clientid
       document.getElementById('mqtt_username').value = msg.username
       document.getElementById('mqtt_password').value = msg.password
+      document.getElementById('publish_theme').value = msg.publish
+      document.getElementById('subscribe_theme').value = msg.subscribe
       var mqtt_version = document.getElementById('mqtt_version')
       var opts=mqtt_version.getElementsByTagName("option");
       for(var i=0; i<opts.length; i++){
@@ -321,7 +302,10 @@ GetdeviceModeBtn.addEventListener("click",function(event){
   })
 })
 
-function add_colomn(slave_address, modbus_function, register_address, register_count, slave_function, data_deal, slave_protocol ) {
+function add_colomn(
+  slave_address, modbus_function, register_address, 
+  register_count, slave_function, endian, 
+  data_multiply, slave_protocol) {
   //创建节点
   var editTable = document.querySelector('tbody');
   var tr = document.createElement('tr');
@@ -333,7 +317,66 @@ function add_colomn(slave_address, modbus_function, register_address, register_c
   var td6 = document.createElement('td');
   var td7 = document.createElement('td');
   var td8 = document.createElement('td');
+  var td9 = document.createElement('td');
   //获取元素内容
+  var endianCode;
+  switch (parseInt(endian)) {
+    case 1:
+      endianCode = "BIG"
+      break;
+    case 2:
+      endianCode = "LITTLE"
+      break;
+    default:
+      break;
+  }
+  var multiplyCode;
+  switch (parseInt(data_multiply)) {
+    case 1:
+      multiplyCode = "x0.001"
+      break;
+    case 2:
+      multiplyCode = "x0.01"
+      break;
+    case 3:
+      multiplyCode = "x0.1"
+      break;
+    case 4:
+      multiplyCode = "x1"
+      break;
+    case 5:
+      multiplyCode = "x10"
+      break;
+    case 6:
+      multiplyCode = "x100"
+      break;
+    case 7:
+      multiplyCode = "x1000"
+      break;
+    default:
+      break;
+  }
+  var protocolCode;
+  switch (parseInt(slave_protocol)) {
+    case 2:
+      protocolCode = "MQTT"
+      break;
+    case 3:
+      protocolCode = "TCP"
+      break;
+    case 4:
+      protocolCode = "UDP"
+      break;
+    case 5:
+      protocolCode = "HTTP"
+      break;
+    case 6:
+      protocolCode = "ALI云"
+      break;
+        
+    default:
+      break;
+  }
   var checkbox=document.createElement("input");
   checkbox.type="checkbox";
   checkbox.name="checkRow";
@@ -343,8 +386,9 @@ function add_colomn(slave_address, modbus_function, register_address, register_c
   td4.innerHTML = register_address;
   td5.innerHTML = register_count;
   td6.innerHTML = slave_function;
-  td7.innerHTML = data_deal;
-  td8.innerHTML = slave_protocol;
+  td7.innerHTML = endianCode;
+  td8.innerHTML = multiplyCode;
+  td9.innerHTML = protocolCode;
   //添加内容到表格中
   tr.append(td1);
   tr.append(td2);
@@ -354,6 +398,7 @@ function add_colomn(slave_address, modbus_function, register_address, register_c
   tr.append(td6);
   tr.append(td7);
   tr.append(td8);
+  tr.append(td9);
   editTable.append(tr);
 }
 
@@ -365,7 +410,8 @@ addSlaveBtn.addEventListener("click",function(event){
   var register_address = document.getElementById("register_address")
   var register_count = document.getElementById("register_count")
   var slave_function = document.getElementById("slave_function")
-  var data_deal = document.getElementById("data_deal")
+  var endian = document.getElementById("endian")
+  var data_multiply = document.getElementById("data_multiply")
   var slave_protocol = document.getElementById("slave_protocol")
 
   if(slave_address.value === '' || register_address.value === ''|| slave_function.value === ''|| slave_protocol.value === '') {
@@ -378,7 +424,8 @@ addSlaveBtn.addEventListener("click",function(event){
       register_address.value,
       register_count.value,
       slave_function.value,
-      data_deal.value,
+      endian.value,
+      data_multiply.value,
       slave_protocol.value
     )
   }
@@ -412,35 +459,74 @@ commitSlaveBtn.addEventListener("click",function(event){
   var rows = editTable.rows
   for(var i=0; i<rows.length; i++){
     var cells = rows[i].cells;
-    var protocol_code = 0
-    switch (cells[7].childNodes[0].nodeValue) {
-      case "MQTT":
-        protocol_code = 2;
-        break;
-      case "TCP":
-        protocol_code = 3;
-        break;
-      case "UDP":
-        protocol_code = 4;
-        break;
-      case "HTTP":
-        protocol_code = 5;
-        break;
-      case "ALI":
-        protocol_code = 6;
-      default:
-        protocol_code = 0;
-        break;
-    }
-    
+    //获取元素内容
+  var endianCode;
+  switch (cells[6].childNodes[0].nodeValue) {
+    case "BIG":
+      endianCode = 1
+      break;
+    case "LITTLE":
+      endianCode = 2
+      break;
+    default:
+      break;
+  }
+  var multiplyCode;
+  switch (cells[7].childNodes[0].nodeValue) {
+    case "x0.001":
+      multiplyCode = 1
+      break;
+    case "x0.01":
+      multiplyCode = 2
+      break;
+    case "x0.1":
+      multiplyCode = 3
+      break;
+    case "x1":
+      multiplyCode = 4
+      break;
+    case "x10":
+      multiplyCode = 5
+      break;
+    case "x100":
+      multiplyCode = 6
+      break;
+    case "x1000":
+      multiplyCode = 7
+      break;
+    default:
+      break;
+  }
+  var protocolCode;
+  switch (cells[8].childNodes[0].nodeValue) {
+    case "MQTT":
+      protocolCode = 2
+      break;
+    case "TCP":
+      protocolCode = 3
+      break;
+    case "UDP":
+      protocolCode = 4
+      break;
+    case "HTTP":
+      protocolCode = 5
+      break;
+    case "ALI云":
+      protocolCode = 6
+      break;
+        
+    default:
+      break;
+  } 
     var item = {
       'slave_address': parseInt(cells[1].childNodes[0].nodeValue),
       'modbus_function': parseInt(cells[2].childNodes[0].nodeValue),
       'register_address': parseInt(cells[3].childNodes[0].nodeValue),
       'register_count': parseInt(cells[4].childNodes[0].nodeValue),
       'slave_function': cells[5].childNodes[0].nodeValue,
-      "data_deal": cells[6].childNodes[0].nodeValue,
-      'slave_protocol': protocol_code,
+      "endian": endianCode,
+      "data_multiply": multiplyCode,
+      'slave_protocol': protocolCode,
     }
     sendvalue.msg.push(item)
   }
@@ -538,6 +624,8 @@ SetMqttBtn.addEventListener('click',function(){
   let mqtt_clientid_value = document.getElementById('mqtt_clientid').value;
   let mqtt_username_value = document.getElementById('mqtt_username').value;
   let mqtt_password_value = document.getElementById('mqtt_password').value;
+  let publish_theme_value = document.getElementById('publish_theme').value;
+  let subscribe_theme_value = document.getElementById('subscribe_theme').value;
   let mqtt_version = document.getElementById('mqtt_version');
   let mqtt_version_value = mqtt_version.options[mqtt_version.selectedIndex].value;
   
@@ -546,15 +634,17 @@ SetMqttBtn.addEventListener('click',function(){
     return
   }
   
-  var mqttserting = {
+  var mqttsetting = {
     'clientid': mqtt_clientid_value,
     'username': mqtt_username_value,
     'address': mqtt_address_value,
     'password': mqtt_password_value,
     'port': parseInt(mqtt_port_value),
-    'version': parseInt(mqtt_version_value)
+    'version': parseInt(mqtt_version_value),
+    'publish': publish_theme_value,
+    'subscribe': subscribe_theme_value
   }
-  var mqttConfigJson = {'SerialFunction':15, 'msg': mqttserting}
+  var mqttConfigJson = {'SerialFunction':15, 'msg': mqttsetting}
 
   myserialport.write(JSON.stringify(mqttConfigJson)+"+", function(err) {
     if (err) {
