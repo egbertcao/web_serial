@@ -56,8 +56,7 @@ function ParseIncomeData(data)
           element.register_count,
           element.slave_function,
           element.endian,
-          element.data_multiply,
-          element.slave_protocol
+          element.data_multiply
         )
       }
       break;
@@ -87,6 +86,7 @@ function ParseIncomeData(data)
           opts[i].selected = true;
         }
       }
+      show_protocol(msg.passProtocol)
       break;
 
     case 20: // 获取串口配置
@@ -192,7 +192,7 @@ GetDeviceDetailBtn.addEventListener('click',function(){
     return
   }
   var send_data = {"SerialFunction":12}
-  myserialport.write(JSON.stringify(send_data)+"+", function(err) {
+  myserialport.write(JSON.stringify(send_data)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -231,7 +231,7 @@ SetdeviceModeBtn.addEventListener("click",function(event){
       break;
   }
   
-  myserialport.write(sendvalue+"+", function(err) {
+  myserialport.write(sendvalue+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -239,11 +239,37 @@ SetdeviceModeBtn.addEventListener("click",function(event){
     console.log("Set DeviceMode Success.")
     serial_output.innerHTML = "Set DeviceMode Success，Please reboot."
   })
-  if(device_mode_value == 3){
-    div_show("protocolType")
-  }
 })
 
+function show_protocol(value) {
+  switch (parseInt(value)) {
+    case 7:
+      div_hidden("MqttSetting")
+      div_hidden("AliSetting")
+      div_hidden("TCPSetting")
+    case 2:
+      div_hidden("TCPSetting")
+      div_hidden("AliSetting")
+      div_show("MqttSetting")
+      break;
+    case 3:
+    case 4:
+      div_hidden("MqttSetting")
+      div_hidden("AliSetting")
+      div_show("TCPSetting")
+      break;
+    case 5:
+      div_hidden("MqttSetting")
+      div_hidden("AliSetting")
+      div_hidden("TCPSetting")
+      break;
+    case 6:
+      div_hidden("MqttSetting")
+      div_hidden("TCPSetting")
+      div_show("AliSetting")
+      break;
+  }
+}
 const SetPassthroughBtn = document.getElementById('SetPassthroughBtn')
 SetPassthroughBtn.addEventListener('click',function(){
   if(ConnectionFlag == false) {
@@ -257,9 +283,10 @@ SetPassthroughBtn.addEventListener('click',function(){
     alert('请选择透传协议')
     return
   }
+  show_protocol(passProtocol_value)
   var passprotocol_data = {"SerialFunction":17, "msg":{"passProtocol":parseInt(passProtocol_value)}}
   
-  myserialport.write(JSON.stringify(passprotocol_data)+"+", function(err) {
+  myserialport.write(JSON.stringify(passprotocol_data)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -276,7 +303,7 @@ GetPassthroughBtn.addEventListener('click',function(){
     return
   }
   var passprotocol_data = {"SerialFunction":18}
-  myserialport.write(JSON.stringify(passprotocol_data)+"+", function(err) {
+  myserialport.write(JSON.stringify(passprotocol_data)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -293,7 +320,7 @@ GetdeviceModeBtn.addEventListener("click",function(event){
     return
   }
   var sendvalue = {"SerialFunction":11}
-  myserialport.write(JSON.stringify(sendvalue)+"+", function(err) {
+  myserialport.write(JSON.stringify(sendvalue)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -305,7 +332,7 @@ GetdeviceModeBtn.addEventListener("click",function(event){
 function add_colomn(
   slave_address, modbus_function, register_address, 
   register_count, slave_function, endian, 
-  data_multiply, slave_protocol) {
+  data_multiply) {
   //创建节点
   var editTable = document.querySelector('tbody');
   var tr = document.createElement('tr');
@@ -317,7 +344,6 @@ function add_colomn(
   var td6 = document.createElement('td');
   var td7 = document.createElement('td');
   var td8 = document.createElement('td');
-  var td9 = document.createElement('td');
   //获取元素内容
   var endianCode;
   switch (parseInt(endian)) {
@@ -356,27 +382,6 @@ function add_colomn(
     default:
       break;
   }
-  var protocolCode;
-  switch (parseInt(slave_protocol)) {
-    case 2:
-      protocolCode = "MQTT"
-      break;
-    case 3:
-      protocolCode = "TCP"
-      break;
-    case 4:
-      protocolCode = "UDP"
-      break;
-    case 5:
-      protocolCode = "HTTP"
-      break;
-    case 6:
-      protocolCode = "ALI云"
-      break;
-        
-    default:
-      break;
-  }
   var checkbox=document.createElement("input");
   checkbox.type="checkbox";
   checkbox.name="checkRow";
@@ -388,7 +393,6 @@ function add_colomn(
   td6.innerHTML = slave_function;
   td7.innerHTML = endianCode;
   td8.innerHTML = multiplyCode;
-  td9.innerHTML = protocolCode;
   //添加内容到表格中
   tr.append(td1);
   tr.append(td2);
@@ -398,7 +402,6 @@ function add_colomn(
   tr.append(td6);
   tr.append(td7);
   tr.append(td8);
-  tr.append(td9);
   editTable.append(tr);
 }
 
@@ -412,9 +415,8 @@ addSlaveBtn.addEventListener("click",function(event){
   var slave_function = document.getElementById("slave_function")
   var endian = document.getElementById("endian")
   var data_multiply = document.getElementById("data_multiply")
-  var slave_protocol = document.getElementById("slave_protocol")
 
-  if(slave_address.value === '' || register_address.value === ''|| slave_function.value === ''|| slave_protocol.value === '') {
+  if(slave_address.value === '' || register_address.value === ''|| slave_function.value === '') {
     alert('请输入内容');
   }
   else {
@@ -425,8 +427,7 @@ addSlaveBtn.addEventListener("click",function(event){
       register_count.value,
       slave_function.value,
       endian.value,
-      data_multiply.value,
-      slave_protocol.value
+      data_multiply.value
     )
   }
 })
@@ -497,27 +498,7 @@ commitSlaveBtn.addEventListener("click",function(event){
     default:
       break;
   }
-  var protocolCode;
-  switch (cells[8].childNodes[0].nodeValue) {
-    case "MQTT":
-      protocolCode = 2
-      break;
-    case "TCP":
-      protocolCode = 3
-      break;
-    case "UDP":
-      protocolCode = 4
-      break;
-    case "HTTP":
-      protocolCode = 5
-      break;
-    case "ALI云":
-      protocolCode = 6
-      break;
-        
-    default:
-      break;
-  } 
+  
     var item = {
       'slave_address': parseInt(cells[1].childNodes[0].nodeValue),
       'modbus_function': parseInt(cells[2].childNodes[0].nodeValue),
@@ -526,13 +507,12 @@ commitSlaveBtn.addEventListener("click",function(event){
       'slave_function': cells[5].childNodes[0].nodeValue,
       "endian": endianCode,
       "data_multiply": multiplyCode,
-      'slave_protocol': protocolCode,
     }
     sendvalue.msg.push(item)
   }
   console.log(sendvalue)
   var sendvaludStr = JSON.stringify(sendvalue)
-  myserialport.write(sendvaludStr+"+", function(err) {
+  myserialport.write(sendvaludStr+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -550,7 +530,7 @@ getSlaveBtn.addEventListener("click",function(event){
   }
   var sendvalue= {"SerialFunction":14}
   var sendvaludStr = JSON.stringify(sendvalue)
-  myserialport.write(sendvaludStr+"+", function(err) {
+  myserialport.write(sendvaludStr+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -585,7 +565,7 @@ SetSerialBtn.addEventListener('click',function(){
     "serialSeting_stop":parseInt(serialSeting_stop_value),
     "serialSeting_Parity":parseInt(serialSeting_Parity_value)}}
   
-  myserialport.write(JSON.stringify(serialSetting_data)+"+", function(err) {
+  myserialport.write(JSON.stringify(serialSetting_data)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -602,7 +582,7 @@ GetSerialBtn.addEventListener('click',function(){
     return
   }
   var sendvalue = '{"SerialFunction":20}'
-  myserialport.write(sendvalue+"+", function(err) {
+  myserialport.write(sendvalue+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -645,8 +625,9 @@ SetMqttBtn.addEventListener('click',function(){
     'subscribe': subscribe_theme_value
   }
   var mqttConfigJson = {'SerialFunction':15, 'msg': mqttsetting}
+  console.log(mqttConfigJson)
 
-  myserialport.write(JSON.stringify(mqttConfigJson)+"+", function(err) {
+  myserialport.write(JSON.stringify(mqttConfigJson)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -663,7 +644,7 @@ GetMqttBtn.addEventListener('click',function(){
     return
   }
   var mqttConfigJson = {'SerialFunction':16}
-  myserialport.write(JSON.stringify(mqttConfigJson)+"+", function(err) {
+  myserialport.write(JSON.stringify(mqttConfigJson)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -697,7 +678,7 @@ SetTcpBtn.addEventListener('click',function(){
   }
   var tcpsetingJson = {'SerialFunction':21, 'msg': tcpseting}
 
-  myserialport.write(JSON.stringify(tcpsetingJson)+"+", function(err) {
+  myserialport.write(JSON.stringify(tcpsetingJson)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -714,7 +695,7 @@ GetTcpBtn.addEventListener('click',function(){
     return
   }
   var ConfigJson = {'SerialFunction':22, "msg":{'tcpudp':1}}
-  myserialport.write(JSON.stringify(ConfigJson)+"+", function(err) {
+  myserialport.write(JSON.stringify(ConfigJson)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -752,7 +733,7 @@ SetAliBtn.addEventListener('click',function(){
   }
   var alisetingJson = {'SerialFunction':23, 'msg': aliseting}
 
-  myserialport.write(JSON.stringify(alisetingJson)+"+", function(err) {
+  myserialport.write(JSON.stringify(alisetingJson)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -769,7 +750,7 @@ GetAliBtn.addEventListener('click',function(){
     return
   }
   var ConfigJson = {'SerialFunction':24}
-  myserialport.write(JSON.stringify(ConfigJson)+"+", function(err) {
+  myserialport.write(JSON.stringify(ConfigJson)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -786,7 +767,7 @@ GetUdpBtn.addEventListener('click',function(){
     return
   }
   var ConfigJson = {'SerialFunction':22, "msg":{'tcpudp':2}}
-  myserialport.write(JSON.stringify(ConfigJson)+"+", function(err) {
+  myserialport.write(JSON.stringify(ConfigJson)+"$", function(err) {
     if (err) {
       serial_output.innerHTML =err.message
       return console.log('Error on write: ', err.message)
@@ -811,11 +792,11 @@ ipcRenderer.on("send-message-to-renderer",(event,args)=>{
     div_show('serialConnect')
     div_hidden('ModeSetting')
     div_hidden('ModbusSetting')
-    div_hidden('protocolType')
     div_hidden('serialSetting')
     div_hidden('MqttSetting')
     div_hidden('TCPSetting')
     div_hidden('AliSetting')
+    div_hidden('protocolSetting')
   }
   if(args == '设备模式配置') {
     div_hidden('serialConnect')
@@ -825,60 +806,39 @@ ipcRenderer.on("send-message-to-renderer",(event,args)=>{
     div_hidden('MqttSetting')
     div_hidden('TCPSetting')
     div_hidden('AliSetting')
-    let device_mode = document.getElementById('device_mode');
-    let device_mode_value = device_mode.options[device_mode.selectedIndex].value;
-    if(device_mode_value == 3){
-      div_show("protocolType")
-    }
+    div_hidden('protocolSetting')
   }
   if(args == 'Modbus配置') {
     div_hidden('serialConnect')
     div_hidden('ModeSetting')
     div_show('ModbusSetting')
-    div_hidden('protocolType')
     div_hidden('serialSetting')
     div_hidden('MqttSetting')
     div_hidden('TCPSetting')
     div_hidden('AliSetting')
+    div_hidden('protocolSetting')
   }
   if(args == '串口配置'){
     div_hidden('serialConnect')
     div_hidden('ModeSetting')
     div_hidden('ModbusSetting')
-    div_hidden('protocolType')
     div_hidden("MqttSetting")
     div_show("serialSetting")
     div_hidden('TCPSetting')
     div_hidden('AliSetting')
+    div_hidden('protocolSetting')
   }
-  if(args == 'MQTT配置') {
+  if(args == '协议配置') {
     div_hidden('serialConnect')
     div_hidden('ModeSetting')
     div_hidden('ModbusSetting')
-    div_hidden('protocolType')
     div_hidden('serialSetting')
     div_hidden('TCPSetting')
     div_hidden('AliSetting')
-    div_show("MqttSetting")
-  }
-  if(args == 'TCP配置') {
-    div_hidden('serialConnect')
-    div_hidden('ModeSetting')
-    div_hidden('ModbusSetting')
-    div_hidden('protocolType')
-    div_hidden('serialSetting')
     div_hidden("MqttSetting")
-    div_hidden('AliSetting')
-    div_show("TCPSetting")
-  }
-  if(args == 'Ali配置') {
-    div_hidden('serialConnect')
-    div_hidden('ModeSetting')
-    div_hidden('ModbusSetting')
-    div_hidden('protocolType')
-    div_hidden('serialSetting')
-    div_hidden("MqttSetting")
-    div_hidden("TCPSetting")
-    div_show('AliSetting')
+    div_show('protocolSetting')
+    var passProtocol = document.getElementById('passProtocol')
+    let passProtocol_value = passProtocol.options[passProtocol.selectedIndex].value;
+    show_protocol(passProtocol_value)
   }
 })

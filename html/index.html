@@ -53,18 +53,6 @@
             </select>
             <button  class="button button1" id="SetdeviceModeBtn">设置模式</button>
             <button  class="button button1" id="GetdeviceModeBtn">获取模式</button>
-            <div class="menu_content", id="protocolType">
-                <select id="passProtocol" name="passProtocol">
-                    <option value="" style="display: none;" disabled selected>透传协议</option>
-                    <option value="2">MQTT</option>
-                    <option value="3">TCP</option>
-                    <option value="4">UDP</option>
-                    <option value="5">HTTP</option>
-                    <option value="6">阿里云</option>
-                </select>
-                <button  class="button button1" id="SetPassthroughBtn">设置透传协议</button>
-                <button  class="button button1" id="GetPassthroughBtn">获取透传协议</button>
-            </div>
         </span>
     </div>
 
@@ -100,14 +88,6 @@
                 <option value="6">x100</option>
                 <option value="7">x1000</option>
             </select>
-            <select id="slave_protocol" name="slave_protocol">
-                <option value="" style="display: none;" disabled selected>传输协议</option>
-                <option value="2">MQTT</option>
-                <option value="3">TCP</option>
-                <option value="4">UDP</option>
-                <option value="5">HTTP</option>
-                <option value="6">阿里云</option>
-            </select>
             <button  class="button button2_1" id="addSlaveBtn">ADD</button>
             <button  class="button button2_2" id="deleteSlaveBtn">DELETE</button>
             <button  class="button button2_3" id="commitSlaveBtn">COMMIT</button>
@@ -123,7 +103,6 @@
                     <td>功能定义</td>
                     <td>大小端</td>
                     <td>倍率</td>
-                    <td>传输协议</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -158,54 +137,67 @@
             <button  class="button button1" id="GetSerialBtn" >获取串口</button><br>
         </span>
     </div>
-    <div class="menu_content" id="MqttSetting">
-        <span>
-            <input type="text" name="mqtt_address" id="mqtt_address" class="content_input" placeholder="MQTT地址">
-            <input type="number" name="mqtt_port" id="mqtt_port" class="content_input" placeholder="MQTT端口号">
-            <input type="text" name="mqtt_clientid" id="mqtt_clientid" class="content_input" placeholder="MQTT ClientID">
-            <input type="text" name="mqtt_username" id="mqtt_username" class="content_input" placeholder="MQTT用户名">
-            <input type="text" name="mqtt_password" id="mqtt_password" class="content_input" placeholder="MQTT密码">
-            <input type="text" name="publish_theme" id="publish_theme" class="content_input" placeholder="发布主题">
-            <input type="text" name="subscribe_theme" id="subscribe_theme" class="content_input" placeholder="订阅主题">
-            <select id="mqtt_version" name="mqtt_version">
-                <option value="" style="display: none;" disabled selected>MQTT版本</option>
-                <option value="3">3.1</option>
-                <option value="4">3.1.1</option>
-            </select>
-            <button  class="button button1" id="SetMqttBtn">设置MQTT</button>
-            <button  class="button button1" id="GetMqttBtn">获取MQTT</button>
-        </span>
-    </div>
-    <div class="menu_content" id="TCPSetting">
-        <span>
-            <select id="TCP_UDP" name="TCP_UDP">
-                <option value="" style="display: none;" disabled selected>TCP/UDP</option>
-                <option value="1">TCP</option>
-                <option value="2">UDP</option>
-            </select>
-            <input type="text" name="ip_address" id="ip_address" class="content_input" placeholder="地址">
-            <input type="number" name="ip_port" id="ip_port" class="content_input" placeholder="端口号">
-            <button  class="button button1" id="SetTcpBtn">设置</button>
-            <button  class="button button1" id="GetTcpBtn">获取TCP</button>
-            <button  class="button button1" id="GetUdpBtn">获取UDP</button>
-        </span>
-    </div>
-    <div class="menu_content" id="AliSetting">
-        <span>
-            <input type="text" name="product_key" id="product_key" class="content_input" placeholder="product key">
-            <input type="text" name="product_secret" id="product_secret" class="content_input" placeholder="product secret">
-            <input type="text" name="device_name" id="device_name" class="content_input" placeholder="device name">
-            <input type="text" name="device_secret" id="device_secret" class="content_input" placeholder="device secret">
-            <select id="puback_mode" name="puback_mode">
-                <option value="" style="display: none;" disabled selected>ACK模式</option>
-                <option value="1">automatic</option>
-                <option value="2">manual</option>
-            </select>
-            <button  class="button button1" id="SetAliBtn">设置</button>
-            <button  class="button button1" id="GetAliBtn">获取</button>
-        </span>
-    </div>
 
+    <div class="menu_content" id="protocolSetting">
+        <span>
+            <select id="passProtocol" name="passProtocol">
+                <option value="" style="display: none;" disabled selected>传输协议</option>
+                <option value="7">INTERBOARD</option>
+                <option value="2">MQTT</option>
+                <option value="3">TCP</option>
+                <option value="4">UDP</option>
+                <option value="5">HTTP</option>
+                <option value="6">阿里云</option>
+            </select>
+            <button  class="button button1" id="SetPassthroughBtn">设置传输协议</button>
+            <button  class="button button1" id="GetPassthroughBtn">获取传输协议</button>
+            <div class="menu_content" id="MqttSetting">
+                    <input type="text" name="mqtt_address" id="mqtt_address" class="content_input" placeholder="MQTT地址">
+                    <input type="number" name="mqtt_port" id="mqtt_port" class="content_input" placeholder="MQTT端口号">
+                    <input type="text" name="mqtt_clientid" id="mqtt_clientid" class="content_input" placeholder="MQTT ClientID">
+                    <input type="text" name="mqtt_username" id="mqtt_username" class="content_input" placeholder="MQTT用户名">
+                    <input type="text" name="mqtt_password" id="mqtt_password" class="content_input" placeholder="MQTT密码">
+                    <input type="text" name="publish_theme" id="publish_theme" class="content_input" placeholder="发布主题">
+                    <input type="text" name="subscribe_theme" id="subscribe_theme" class="content_input" placeholder="订阅主题">
+                    <select id="mqtt_version" name="mqtt_version">
+                        <option value="" style="display: none;" disabled selected>MQTT版本</option>
+                        <option value="3">3.1</option>
+                        <option value="4">3.1.1</option>
+                    </select>
+                    <button  class="button button1" id="SetMqttBtn">设置MQTT</button>
+                    <button  class="button button1" id="GetMqttBtn">获取MQTT</button>
+            </div>
+            <div class="menu_content" id="TCPSetting">
+                <span>
+                    <select id="TCP_UDP" name="TCP_UDP">
+                        <option value="" style="display: none;" disabled selected>TCP/UDP</option>
+                        <option value="1">TCP</option>
+                        <option value="2">UDP</option>
+                    </select>
+                    <input type="text" name="ip_address" id="ip_address" class="content_input" placeholder="地址">
+                    <input type="number" name="ip_port" id="ip_port" class="content_input" placeholder="端口号">
+                    <button  class="button button1" id="SetTcpBtn">设置</button>
+                    <button  class="button button1" id="GetTcpBtn">获取TCP</button>
+                    <button  class="button button1" id="GetUdpBtn">获取UDP</button>
+                </span>
+            </div>
+            <div class="menu_content" id="AliSetting">
+                <span>
+                    <input type="text" name="product_key" id="product_key" class="content_input" placeholder="product key">
+                    <input type="text" name="product_secret" id="product_secret" class="content_input" placeholder="product secret">
+                    <input type="text" name="device_name" id="device_name" class="content_input" placeholder="device name">
+                    <input type="text" name="device_secret" id="device_secret" class="content_input" placeholder="device secret">
+                    <select id="puback_mode" name="puback_mode">
+                        <option value="" style="display: none;" disabled selected>ACK模式</option>
+                        <option value="1">automatic</option>
+                        <option value="2">manual</option>
+                    </select>
+                    <button  class="button button1" id="SetAliBtn">设置</button>
+                    <button  class="button button1" id="GetAliBtn">获取</button>
+                </span>
+            </div>
+        </span>
+    </div>
   </div>
 
   <div class="column content">

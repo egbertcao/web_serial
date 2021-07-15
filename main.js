@@ -75,39 +75,16 @@ app.on('ready', function(){
             }
         },
         {
-            label: '通讯配置',
-            submenu: [
-                {
-                    label: '串口配置',
-                    click: function(){
-                        mainWindow.webContents.send("send-message-to-renderer","串口配置");
-                    }
-                },
-                {
-                    label: 'MQTT配置',
-                    click: function(){
-                        mainWindow.webContents.send("send-message-to-renderer","MQTT配置");
-                    }
-                },
-                {
-                    label: 'TCP/UDP配置',
-                    click: function(){
-                        mainWindow.webContents.send("send-message-to-renderer","TCP配置");
-                    }
-                },
-                {
-                    label: 'HTTP配置',
-                    click: function(){
-                        mainWindow.webContents.send("send-message-to-renderer","HTTP配置");
-                    }
-                },
-                {
-                    label: 'Ali配置',
-                    click: function(){
-                        mainWindow.webContents.send("send-message-to-renderer","Ali配置");
-                    }
-                }
-            ]
+            label: '协议配置',
+            click: function(){
+                mainWindow.webContents.send("send-message-to-renderer","协议配置");
+            }
+        },
+        {
+            label: '串口配置',
+            click: function(){
+                mainWindow.webContents.send("send-message-to-renderer","串口配置");
+            }
         },
         {
             label: 'HELP',
