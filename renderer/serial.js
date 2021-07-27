@@ -124,7 +124,7 @@ function ParseIncomeData(data)
           opts[i].selected = true;
         }
       }
-      case 24: // 获取ali
+    case 24: // 获取ali
         document.getElementById('product_key').value = msg.product_key
         document.getElementById('product_secret').value = msg.product_secret
         document.getElementById('device_name').value = msg.device_name
@@ -137,6 +137,9 @@ function ParseIncomeData(data)
           }
         }
       break;
+    case 26: // 获取http
+      document.getElementById('posturl').value = msg.url
+    break;
     default:
       break;
   }
@@ -247,24 +250,29 @@ function show_protocol(value) {
       div_hidden("MqttSetting")
       div_hidden("AliSetting")
       div_hidden("TCPSetting")
+      div_hidden("TCPSetting")
     case 2:
       div_hidden("TCPSetting")
       div_hidden("AliSetting")
+      div_hidden("TCPSetting")
       div_show("MqttSetting")
       break;
     case 3:
     case 4:
       div_hidden("MqttSetting")
       div_hidden("AliSetting")
+      div_hidden("TCPSetting")
       div_show("TCPSetting")
       break;
     case 5:
       div_hidden("MqttSetting")
       div_hidden("AliSetting")
       div_hidden("TCPSetting")
+      div_show("HttpSetting")
       break;
     case 6:
       div_hidden("MqttSetting")
+      div_hidden("TCPSetting")
       div_hidden("TCPSetting")
       div_show("AliSetting")
       break;
@@ -705,6 +713,52 @@ GetTcpBtn.addEventListener('click',function(){
   })
 })
 
+// TCP设置
+const SetHttpBtn = document.getElementById('SetHttpBtn')
+SetHttpBtn.addEventListener('click',function(){
+  if(ConnectionFlag == false) {
+    alert("Device not Connectted.")
+    return
+  }
+  let posturl_value = document.getElementById('posturl').value;
+  
+  if(posturl_value == ''){
+    alert('请填写信息')
+    return
+  }
+  
+  var httpseting = {
+    'url': posturl_value
+  }
+  var httpsetingJson = {'SerialFunction':25, 'msg': httpseting}
+
+  myserialport.write(JSON.stringify(httpsetingJson)+"$", function(err) {
+    if (err) {
+      serial_output.innerHTML =err.message
+      return console.log('Error on write: ', err.message)
+    }
+    serial_output.innerHTML = "Set http Success，Please reboot."
+    console.log("Set http Success.")
+  })
+})
+
+const GetHttpBtn = document.getElementById('GetHttpBtn')
+GetHttpBtn.addEventListener('click',function(){
+  if(ConnectionFlag == false) {
+    alert("Device not Connectted.")
+    return
+  }
+  var ConfigJson = {'SerialFunction':26}
+  myserialport.write(JSON.stringify(ConfigJson)+"$", function(err) {
+    if (err) {
+      serial_output.innerHTML =err.message
+      return console.log('Error on write: ', err.message)
+    }
+    serial_output.innerHTML = "Get http Success."
+    console.log("Get http Success.")
+  })
+})
+
 // Ali设置
 const SetAliBtn = document.getElementById('SetAliBtn')
 SetAliBtn.addEventListener('click',function(){
@@ -836,6 +890,7 @@ ipcRenderer.on("send-message-to-renderer",(event,args)=>{
     div_hidden('TCPSetting')
     div_hidden('AliSetting')
     div_hidden("MqttSetting")
+    div_hidden("HttpSetting")
     div_show('protocolSetting')
     var passProtocol = document.getElementById('passProtocol')
     let passProtocol_value = passProtocol.options[passProtocol.selectedIndex].value;

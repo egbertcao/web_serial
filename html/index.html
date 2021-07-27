@@ -24,11 +24,15 @@
             </select>
             <select id="serial_data" name="serial_data">
                 <option value="" style="display: none;" disabled selected>Data Bits</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
                 <option value="8">8</option>
             </select>
             <select id="serial_stop" name="serial_stop">
                 <option value="" style="display: none;" disabled selected>Stop Bits</option>
                 <option value="1">1</option>
+                <option value="2">2</option>
             </select>
             <select id="serial_Parity" name="serial_Parity">
                 <option value="" style="display: none;" disabled selected>Parity</option>
@@ -194,6 +198,13 @@
                     </select>
                     <button  class="button button1" id="SetAliBtn">设置</button>
                     <button  class="button button1" id="GetAliBtn">获取</button>
+                </span>
+            </div>
+            <div class="menu_content" id="HttpSetting">
+                <span>
+                    <input type="text" name="posturl" id="posturl" class="content_input" placeholder="post url">
+                    <button  class="button button1" id="SetHttpBtn">设置</button>
+                    <button  class="button button1" id="GetHttpBtn">获取</button>
                 </span>
             </div>
         </span>
